@@ -1,33 +1,46 @@
 local plugins = {
-  'navarasu/onedark.nvim',
-  'neovim/nvim-lspconfig',
-  'tpope/vim-fugitive',
-  'tpope/vim-vinegar',
-  'wbthomason/packer.nvim',
+    'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/nvim-cmp',
+    'mbbill/undotree',
+    'navarasu/onedark.nvim',
+    'neovim/nvim-lspconfig',
+    'nvim-lualine/lualine.nvim',
+    'tpope/vim-fugitive',
+    'tpope/vim-vinegar',
+    'wbthomason/packer.nvim',
+
+    {
+        'nvim-treesitter/nvim-treesitter',
+        run = function()
+            local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+            ts_update()
+        end,
+    },
+    { 'junegunn/fzf.vim', requires = { 'junegunn/fzf', run = ':call fzf#install()' } },
 }
 
 local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
-  end
-  return false
+    local fn = vim.fn
+    local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+    if fn.empty(fn.glob(install_path)) > 0 then
+        fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
+        vim.cmd [[packadd packer.nvim]]
+        return true
+    end
+    return false
 end
 
 local packer_bootstrap = ensure_packer()
 
 vim.api.nvim_create_user_command(
     'PlugUpdate',
-    function(input)
+    function(_)
         require('packer').update()
     end,
-    {bang = true, desc = 'Update Plugins'}
+    { bang = true, desc = 'Update Plugins' }
 )
 
-return require('packer').startup(function(use)
+require('packer').startup(function(use)
     for _, plugin in ipairs(plugins) do
         use(plugin)
     end
@@ -37,3 +50,14 @@ return require('packer').startup(function(use)
     end
 end)
 
+require('lualine').setup {
+    options = {
+        theme = 'onedark'
+    }
+}
+require('nvim-treesitter.configs').setup({
+    ensure_installed = { "go", "lua", "zig" },
+    sync_install = false,
+    highlight = { enable = true },
+    indent = { enable = true },
+})
