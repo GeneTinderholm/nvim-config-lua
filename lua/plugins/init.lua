@@ -6,6 +6,8 @@ local plugins = {
     'neovim/nvim-lspconfig',
     'nvim-lualine/lualine.nvim',
     'tpope/vim-fugitive',
+    'tpope/vim-rsi',
+    'tpope/vim-surround',
     'tpope/vim-vinegar',
     'wbthomason/packer.nvim',
 
@@ -61,3 +63,7 @@ require('nvim-treesitter.configs').setup({
     highlight = { enable = true },
     indent = { enable = true },
 })
+
+require('onedark').load()
+require('plugins.complete')
+require('plugins.lsp')

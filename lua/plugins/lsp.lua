@@ -1,3 +1,32 @@
+local lsps = {
+    lua_ls = {
+        on_init = function(client)
+            if client.workspace_folders then
+                local path = client.workspace_folders[1].name
+                if path ~= vim.fn.stdpath('config') and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
+                    return
+                end
+            end
+
+            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+                runtime = {
+                    version = 'LuaJIT'
+                },
+                -- Make the server aware of Neovim runtime files
+                workspace = {
+                    checkThirdParty = false,
+                    library = {
+                        vim.env.VIMRUNTIME
+                    }
+                }
+            })
+        end,
+        settings = {
+            Lua = {}
+        }
+    },
+    zls = {},
+}
 local lspconfig = require('lspconfig')
 
 local on_attach = function(_, bufnr)
@@ -16,39 +45,15 @@ local on_attach = function(_, bufnr)
     buf_set_keymap('n', '<space>l', '<cmd>lua vim.lsp.buf.format { async = true }<CR>', opts)
 end
 
-lspconfig.lua_ls.setup {
-    on_init = function(client)
-        if client.workspace_folders then
-            local path = client.workspace_folders[1].name
-            if path ~= vim.fn.stdpath('config') and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
-                return
-            end
-        end
+local default_opts = {
+    on_attach = on_attach,
+    flags = {
+        debounce_text_changes = 150,
+    },
+}
 
-        client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-            runtime = {
-                version = 'LuaJIT'
-            },
-            -- Make the server aware of Neovim runtime files
-            workspace = {
-                checkThirdParty = false,
-                library = {
-                    vim.env.VIMRUNTIME
-                }
-            }
-        })
-    end,
-    on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
-    },
-    settings = {
-        Lua = {}
-    }
-}
-lspconfig.zls.setup {
-    on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
-    },
-}
+local utils = require('utils')
+
+for k, v in pairs(lsps) do
+    lspconfig[k].setup(utils.merge_tables(default_opts, v))
+end

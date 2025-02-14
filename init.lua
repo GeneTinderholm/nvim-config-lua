@@ -19,22 +19,20 @@ vim.env.fzf_preview_args = '--preview bat --style=numbers --color=always --line-
 vim.cmd('syntax enable')
 vim.cmd('filetype plugin indent on')
 
-local function nmap(key, binding, opts)
-    opts = opts or { noremap = true, silent = true }
-    vim.api.nvim_set_keymap('n', key, binding, opts)
-end
-require('plugins')
-require('lsp')
-require('complete')
-require('onedark').load()
+local utils = require('utils')
+vim.o.undodir = utils.ensure_data_dir(".undo")
+vim.o.undofile = true
+vim.o.backupdir = utils.ensure_data_dir(".backup")
+vim.o.directory = utils.ensure_data_dir(".swp")
 
 vim.g.mapleader = ' '
-nmap('<Leader>w', '<C-w>')
-nmap('<Leader><CR>', ':noh<CR>')
-nmap('<Leader>t', ':terminal<cr>')
-nmap('<Leader>f', ':Files<CR>')
-nmap('<Leader>b', ':Buffers<CR>')
-nmap('<Leader><Space>', ':Commands<CR>')
+utils.nmap('<Leader>w', '<C-w>')
+utils.nmap('<Leader><CR>', ':noh<CR>')
+utils.nmap('<Leader>u', ':UndotreeToggle<CR>')
+utils.nmap('<Leader>t', ':terminal<cr>')
+utils.nmap('<Leader>f', ':Files<CR>')
+utils.nmap('<Leader>b', ':Buffers<CR>')
+utils.nmap('<Leader><Space>', ':Commands<CR>')
 
 vim.api.nvim_create_autocmd({ "TermOpen" }, { command = "setlocal nonumber norelativenumber" })
 
@@ -54,3 +52,4 @@ vim.api.nvim_create_user_command(
         desc = 'QuickGrep',
     }
 )
+require('plugins')
