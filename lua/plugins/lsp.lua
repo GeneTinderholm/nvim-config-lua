@@ -1,4 +1,15 @@
 local lsps = {
+    gopls = {
+        settings = {
+            gopls = {
+                analyses = {
+                    unusedparams = true,
+                },
+                staticcheck = true,
+                gofumpt = true,
+            },
+        },
+    },
     lua_ls = {
         on_init = function(client)
             if client.workspace_folders then
@@ -27,6 +38,7 @@ local lsps = {
     },
     zls = {},
 }
+
 local lspconfig = require('lspconfig')
 
 local on_attach = function(_, bufnr)
