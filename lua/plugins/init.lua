@@ -1,4 +1,5 @@
 local plugins = {
+    'hiphish/rainbow-delimiters.nvim',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/nvim-cmp',
     'mbbill/undotree',
