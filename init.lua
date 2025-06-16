@@ -11,7 +11,7 @@ vim.o.hidden = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.modeline = false
-vim.o.wrap = false
+vim.o.wrap = true
 vim.o.clipboard = 'unnamedplus'
 
 vim.env.fzf_preview_args = '--preview bat --style=numbers --color=always --line-range :500 {}'

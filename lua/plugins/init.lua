@@ -20,6 +20,7 @@ local plugins = {
         end,
     },
     { 'junegunn/fzf.vim', requires = { 'junegunn/fzf', run = ':call fzf#install()' } },
+    { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"} }
 }
 
 local ensure_packer = function()
@@ -68,3 +69,4 @@ require('nvim-treesitter.configs').setup({
 require('onedark').load()
 require('plugins.complete')
 require('plugins.lsp')
+require('plugins.dap')
