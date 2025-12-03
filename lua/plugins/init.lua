@@ -1,6 +1,9 @@
 local plugins = {
     'hiphish/rainbow-delimiters.nvim',
+    'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/cmp-nvim-lsp-signature-help',
+    'hrsh7th/cmp-omni',
     'hrsh7th/nvim-cmp',
     'mbbill/undotree',
     'navarasu/onedark.nvim',
@@ -60,7 +63,7 @@ require('lualine').setup {
     }
 }
 require('nvim-treesitter.configs').setup({
-    ensure_installed = { "go", "lua", "zig" },
+    ensure_installed = { "go", "lua", "ruby", "zig" },
     sync_install = false,
     highlight = { enable = true },
     indent = { enable = true },

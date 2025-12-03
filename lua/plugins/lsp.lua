@@ -36,6 +36,7 @@ local lsps = {
             Lua = {}
         }
     },
+    ruby_lsp = {},
     zls = {},
 }
 
@@ -67,5 +68,6 @@ local default_opts = {
 local utils = require('utils')
 
 for k, v in pairs(lsps) do
-    lspconfig[k].setup(utils.merge_tables(default_opts, v))
+    vim.lsp.config(k, utils.merge_tables(default_opts, v))
+    vim.lsp.enable(k)
 end
